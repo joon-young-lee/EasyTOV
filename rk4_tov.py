@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.interpolate import CubicSpline
 import units_cgs as cgs
-import matplotlib.pyplot as plt
+
 # Using Runge-Kutta 4th order
 def eos(file_name):
     data = np.loadtxt(file_name)
@@ -50,8 +50,7 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
                             /(m + 4 * np.pi * p * r2 ** (3.0/2.0))
     dm_dh = lambda r2, p, m: -4 * np.pi * EoS(p) * r2 ** (3.0/2.0) * \
                             (np.sqrt(r2) - 2 * m)/(m + 4 * np.pi * p * r2 ** (3.0/2.0))
-    # dN_dh = lambda r2, p, m: 
-    # convert to km
+    
     p = p0 * cgs.MeV_fm_to_km
     
     r2 = -3 / (2 * np.pi * (EoS(p) + 3 * p)) * del_h
@@ -96,35 +95,39 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
         dr2 = (k1_r2 + 2 * k2_r2 + 2 * k3_r2 + k4_r2) / 6 * del_h
         
         if np.isnan(dp) == True or np.isnan(dm) == True:
-            print(i,'iterations, ended with NaN (dp or dm)')
-            print(f'Final pressure: {p / cgs.MeV_fm_to_km}MeV/fm^3')
-            print(f'inner crust length {np.sqrt(r2)-inner_start} km')
-            print(f'outer crust length {np.sqrt(r2)-outer_start} km')
-
-            return m * cgs.km_to_M0, np.sqrt(r2)
+            mass = m * cgs.km_to_M0
+            radius = np.sqrt(r2)
+            iterations = i
+            final_pressure = p / cgs.MeV_fm_to_km
+            inner_crust = np.sqrt(r2)-inner_start
+            outer_crust = np.sqrt(r2)-outer_start
+            end = 'Ended with NaN (dp or dm)'
+            return mass, radius, iterations, final_pressure, inner_crust, outer_crust, end
         
-        elif np.abs(dm) / m < 1.e-15:
-            print(i,'iterations, ended with mass difference')
-            print(f'Final pressure: {p / cgs.MeV_fm_to_km}MeV/fm^3')
-            print(f'inner crust length {np.sqrt(r2)-inner_start} km')
-            print(f'outer crust length {np.sqrt(r2)-outer_start} km')
-            
-            return m * cgs.km_to_M0, np.sqrt(r2)
+        elif (np.abs(dm) / (m+1.e-15) < 1.e-15) and m != 0.0:
+            mass = m * cgs.km_to_M0
+            radius = np.sqrt(r2)
+            iterations = i
+            final_pressure = p / cgs.MeV_fm_to_km
+            inner_crust = np.sqrt(r2)-inner_start
+            outer_crust = np.sqrt(r2)-outer_start
+            end = 'Ended with mass difference'
+
+            return mass, radius, iterations, final_pressure, inner_crust, outer_crust, end
         # outer crust, inner crust
         
         elif (4.460e11 * cgs.c2 * cgs.erg_cm_to_MeV_fm * cgs.MeV_fm_to_km > EoS(p)) and outer == 1:
             outer = 0
             outer_start = np.sqrt(r2)
-            # print(f'Outer crust start: {outer_start} km')
             
         
         elif (5.094e14 * cgs.c2 * cgs.erg_cm_to_MeV_fm * cgs.MeV_fm_to_km > EoS(p)) and (inner == 1):
             inner = 0
             inner_start = np.sqrt(r2)
-            # print(f'Inner crust start: {inner_start} km')
         else:
             p += dp
             m += dm
             r2 += dr2
 
 
+print(5.094e14 * cgs.c2 * cgs.erg_cm_to_MeV_fm)
