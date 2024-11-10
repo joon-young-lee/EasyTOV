@@ -4,21 +4,17 @@ import time
 import rk4_tov as rk4
 import os
 from datetime import datetime
+
 # All units in km ( c = G = 1 ) 
 
 del_h = -1.e-5
 start_inner_crust = 5.094e14 * cgs.c2 * cgs.erg_cm_to_MeV_fm
 def main():
     start_time = time.time()
-    # file_name = './eos/relativistic.dat'
     file_name = str(input('Select EoS in \'eos\' dir: '))
     file_name = './eos/' + file_name
-    # file_name'./eos/empirical.dat'
-    # file_name = './eos/empirical2.dat'
-    # file_name = './eos/empirical3.dat'
-    # file_name = './eos/nrel.dat'
     EoS = rk4.eos(file_name)
-    # step = 800
+    
     print('------Input for start of central pressure in units MeV/fm^3------')
     while True:
         p_i = float(input('Initial pressure: '))
@@ -66,7 +62,8 @@ def main():
     time_diff = end_time - start_time
     
     data = np.column_stack((P_c, M, R))
-    np.savetxt(f'./{dir_name}/{file_name[5:]}_{current_time.time()}', data, fmt='%.6E', delimiter=' ', 
+    time_of_file_name = str(current_time.time())[:8]
+    np.savetxt(f'./{dir_name}/{file_name[5:]}_{time_of_file_name}.txt', data, fmt='%.6E', delimiter=' ', 
                     header='', comments='')
     
     # output of final, maximum results
@@ -75,6 +72,7 @@ def main():
     print(f'Maximum Mass: {np.max(M):.3f} M_0, central pressure: {P_c[np.argmax(M)]:.5f} MeV/fm^3')
     print(f'Maximum Radius {np.max(R):.3f} km, central pressure: {P_c[np.argmax(R)]:.5f} MeV/fm^3')
     
+    rk4.plot(R, M, f'{dir_name}/plot_{time_of_file_name}')
     
     return 0
 

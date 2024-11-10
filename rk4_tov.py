@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import CubicSpline
 import units_cgs as cgs
@@ -30,8 +31,6 @@ def eos(file_name):
     p = np.concatenate((BPS_p, p_arr[m:]))
     e = np.concatenate((BPS_e, e_arr[m:]))
     
-    # print(p)
-    # print(e)
     
     p *= cgs.MeV_fm_to_km
     e *= cgs.MeV_fm_to_km
@@ -39,6 +38,8 @@ def eos(file_name):
 
     eos = CubicSpline(p, e, bc_type='natural', extrapolate=False)
     
+    # plt.plot(p, eos(p))
+    # plt.show()
     
     return eos # eos in units km(c = G = 1)
 
@@ -55,8 +56,7 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
     
     r2 = -3 / (2 * np.pi * (EoS(p) + 3 * p)) * del_h
     m = 0.0
-    # n_b = 0.0
-    # Runge-Kutta 4th order
+    
     outer = 1
     inner = 1
     for i in range(num):
@@ -129,5 +129,22 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
             m += dm
             r2 += dr2
 
+def plot(R, M, file_name):
+    plt.figure(figsize=(9, 7))
+    plt.title('Radius vs. Mass', fontsize=20)
+    plt.plot(R, M, '-', markersize=2, color='r', label='EoS with crust')
+    
+    plt.xlabel('Radius in km', fontsize=20)
+    plt.ylabel(r'Mass in $M_\odot$', fontsize=22)
+    plt.xlim(4.0, 17.0)
+    plt.ylim(0.0, 3.0)
+    plt.grid()
+    
+    # plt.text(4, 1.5, f'Maximum mass with crust {np.max(M):.2f}', fontsize=17)
+    
+    plt.suptitle(file_name, fontsize=20)
+    plt.savefig(f'{file_name}')
+    plt.legend(fontsize=20, loc='upper left')
+    # plt.show()
 
-print(5.094e14 * cgs.c2 * cgs.erg_cm_to_MeV_fm)
+    return 0
