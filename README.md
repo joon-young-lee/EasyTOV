@@ -1,5 +1,5 @@
 Easy Tolman-Oppenheimer-Volkoff equation solver using RK4 method.
-How to use:
+How to run:
   1. Make a EoS data sheet inside eos directory.
   2. $ python tov.py
   3. Put in the inputs as desried.
