@@ -3,7 +3,7 @@ Easy Tolman-Oppenheimer-Volkoff equation solver using RK4 method.
 How to run:
   1. Make a EoS data sheet inside eos directory.
   2. $ python -u tov.py
-  3. Put in the inputs as desried.
+  3. Put in the inputs.
 
 Inputs:
   1. Name of EoS data file in 'eos' directory
