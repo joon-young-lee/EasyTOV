@@ -44,6 +44,7 @@ def main():
     print(5.1e14 * c2 * erg_cm_to_MeV_fm) # end of neutron drip, start of homogeneous distribution of matter
     r0 = (4.8032 * 10 ** (-10)) ** 2 * 3 / 5 / (0.73 * MeV) 
     print(r0)
+    print(7.391E33 * 6.2414999e-34)
     return 0
 
 if __name__ == '__main__':

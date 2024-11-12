@@ -8,9 +8,10 @@ from datetime import datetime
 # All units in km ( c = G = 1 ) 
 
 del_h = -1.e-5
-start_inner_crust = 5.094e14 * cgs.c2 * cgs.erg_cm_to_MeV_fm
+start_inner_crust = 7.391E33 * 6.2414999e-34 # Start of inner crust, end of outer core
 def main():
     start_time = time.time()
+    current_time = datetime.now()
     file_name = str(input('Select EoS in \'eos\' dir: '))
     file_name = './eos/' + file_name
     EoS = rk4.eos(file_name)
@@ -53,7 +54,7 @@ def main():
 
     print(f'Central Pressure {p_i} MeV/fm^3 ~ {p_f} MeV/fm^3')
     # make new directory in results using current date and time
-    current_time = datetime.now()
+    
     
     dir_name = f'results/{current_time.date()}'
     os.makedirs(dir_name, exist_ok=True)
