@@ -20,3 +20,7 @@ Terminal Outputs:
   1. Plot of M-R
   2. Mass, radius, outer crust, inner crust length, and number of iterations of the rk4 method.
   3. Final, maximum mass, and maximum radius of neutron stars in interval of Initial pressure and Final pressure.
+
+Reference
+  1. Chagne of metric: James Lattimer
+  2. Crust EoS: Baym, 1971
