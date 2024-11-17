@@ -20,6 +20,6 @@
   1. Mass, radius, outer crust, inner crust length, and number of iterations of the rk4 method.
   2. Final, maximum mass, and maximum radius of neutron stars in interval of Initial pressure and Final pressure.
 
-Reference
+# Reference
   1. Chagne of metric: tovh.pdf, James Lattimer
   2. Crust EoS: Baym, 1971, inlcusion of inner and outer crust is default. (unchangable for now!)
