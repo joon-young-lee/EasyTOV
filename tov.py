@@ -1,5 +1,4 @@
 import numpy as np
-import units_cgs as cgs
 import time
 import rk4_tov as rk4
 import os
