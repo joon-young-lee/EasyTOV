@@ -11,7 +11,8 @@
 
 # Output:
   1. Plot of M-R
-  2. M-R data in text file inside 'results' directory. \newline
+  2. M-R data in text file inside 'results' directory.
+  3. 
    First column: Central pressure in MeV/fm^3
    Second column: Total mass of neutron star in M_0
    Third column: Total radius of neutron star in km
