@@ -145,6 +145,6 @@ def plot(R, M, file_name):
     plt.suptitle(file_name, fontsize=20)
     plt.savefig(f'{file_name}')
     plt.legend(fontsize=20, loc='upper left')
-    # plt.show()
+    #  plt.show()
 
     return 0
