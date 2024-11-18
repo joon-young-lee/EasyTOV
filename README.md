@@ -11,14 +11,18 @@
 
 # Output:
   1. Plot of M-R
-  2. M-R data in text file inside 'results' directory, name of the dir is the date.
-   First column: Central pressure in MeV/fm^3
-   Second column: Total mass of neutron star in M_0
+  2. M-R data in text file inside 'results' directory. <br />
+   First column: Central pressure in MeV/fm^3 <br />
+   Second column: Total mass of neutron star in M_0 <br />
    Third column: Total radius of neutron star in km
   
 # Output Log:
   1. Mass, radius, outer crust, inner crust length, and number of iterations of the rk4 method.
   2. Final, maximum mass, and maximum radius of neutron stars in interval of Initial pressure and Final pressure.
+
+# Updates:
+  1. Change functions to classes.
+  2. Numerical error.
 
 # Reference
   1. Chagne of metric: tovh.pdf, James Lattimer
