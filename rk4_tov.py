@@ -6,7 +6,7 @@ import units_cgs as cgs
 # Using Runge-Kutta 4th order
 def eos(file_name):
     data = np.loadtxt(file_name)
-    BPS = np.loadtxt('./crust/BPS.txt', skiprows=1)
+    BPS = np.loadtxt('./eos/crust/BPS.txt', skiprows=1)
     BPS_e = BPS[:, 0] * cgs.c2 * cgs.erg_cm_to_MeV_fm
     BPS_p = BPS[:, 1] * cgs.erg_cm_to_MeV_fm
 
