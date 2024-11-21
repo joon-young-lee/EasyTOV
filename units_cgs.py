@@ -27,7 +27,7 @@ fm_to_km = 1.e-18
 MeV_fm_to_km = MeV_to_km / fm_to_km ** 3
 km_to_M0 = 1 / (M0 * g_to_km) # 1M0 
 km_to_gram = 1 / g_to_km
-
+kb = 1.381 * 10 ** (-23)
 
 n_0 = 0.16 # (fm ** 3)
 # Empirical formula units in MeV
@@ -37,14 +37,18 @@ B = 65.39
 sigma = 2.112
 S_0 = 30.0
 GeV_m_n = 939.57
-
-# 0.2501872839761807 MeV/fm^3
+start_inner_crust = 7.391e33 * 6.2414999e-34 # Start of inner crust, end of outer core in MeV/fm^3
 def main():
     print(4.460e11 * c2 * erg_cm_to_MeV_fm) # neutron drip
     print(5.1e14 * c2 * erg_cm_to_MeV_fm) # end of neutron drip, start of homogeneous distribution of matter
     r0 = (4.8032 * 10 ** (-10)) ** 2 * 3 / 5 / (0.73 * MeV) 
     print(r0)
     print(7.391E33 * 6.2414999e-34)
+    n_v = 1/(np.exp(1.95 * kb) + 1)
+    n_R = 1/(np.exp(2.73 * kb) - 1)
+    print(n_v/n_R)
+    print((np.exp(2.73 * kb) - 1)/(np.exp(1.95 * kb) + 1))
+    print(6 * (1.95) ** 4 / (2 * (2.73) ** 4) * 7/8) 
     return 0
 
 if __name__ == '__main__':

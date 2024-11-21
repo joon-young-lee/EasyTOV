@@ -3,12 +3,11 @@ import time
 import rk4_tov as rk4
 import os
 from datetime import datetime
-
+from units_cgs import start_inner_crust
 # All units in km ( c = G = 1 ) 
 
-del_h = -1.e-5
-start_inner_crust = 7.391E33 * 6.2414999e-34 # Start of inner crust, end of outer core
-def main():
+
+def main(del_h = -1.e-5):
     start_time = time.time()
     current_time = datetime.now()
     file_name = str(input('Select EoS in \'eos\' dir: '))
