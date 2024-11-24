@@ -22,8 +22,7 @@
 
 # Updates:
   1. Change functions to classes.
-  2. Numerical error.
-  3. Conversion to Fortran 90 is expected!
+  2. Conversion to Fortran 90 is expected!
 
 # Reference
   1. Chagne of metric: tovh.pdf, James Lattimer
