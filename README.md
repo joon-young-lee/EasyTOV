@@ -3,7 +3,7 @@
 # How to run:
   1. Make a EoS data sheet inside eos directory. (First column pressure, second column energy density both in MeV/fm^3 units.)
   2. '''$ python -u tov.py'''
-  3. '''$ python -u single_processor_tov.py'''
+  3. '''$ python -u single_processing_tov.py'''
 
 # Inputs:
   1. Name of EoS data file in 'eos' directory.
