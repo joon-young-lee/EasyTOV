@@ -1,7 +1,7 @@
 # Easy Tolman-Oppenheimer-Volkoff equation solver using RK4 method.
 
 # How to run multicore:
-  '''
+  '''console
   $ python -u tov.py
   '''
 
