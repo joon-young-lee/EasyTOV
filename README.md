@@ -1,14 +1,12 @@
 # Easy Tolman-Oppenheimer-Volkoff equation solver using RK4 method.
 
-# How to run:
-  1. Make a EoS data sheet inside eos directory. (First column pressure, second column energy density both in MeV/fm^3 units.)
-  2. '''
+# How to run multicore:
+  '''
   $ python -u tov.py
-      '''
-  4. '''$ python -u single_processing_tov.py'''
+  '''
 
 # Inputs:
-  1. Name of EoS data file in 'eos' directory.
+  1. Name of EoS data file in 'eos' directory. (First column pressure, second column energy density both in MeV/fm^3 units.)
   2. Initial pressure and Final pressure for central pressure.
   3. Number of neutron stars you want to calcualte in the interval between Initial pressure and Final pressure.
 
