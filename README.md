@@ -9,7 +9,7 @@
   2. Initial pressure and Final pressure for central pressure.
   3. Number of neutron stars you want to calcualte in the interval between Initial pressure and Final pressure.
 
-# Output:
+# Output (makes automatic directory of the current date):
   1. Plot of M-R
   2. M-R data in text file inside 'results' directory. <br />
    First column: Central pressure in MeV/fm^3 <br />
