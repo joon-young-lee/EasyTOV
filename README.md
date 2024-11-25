@@ -1,10 +1,13 @@
 # Easy Tolman-Oppenheimer-Volkoff equation solver using RK4 method.
 
-# How to run multicore:
+# How to run multi-core:
   ```console
   $ python -u tov.py
   ```
-
+# How to run single-core:
+  ```console
+  $ python -u single_processing_tov.py
+  ```
 # Inputs:
   1. Name of EoS data file in 'eos' directory. (First column pressure, second column energy density both in MeV/fm^3 units.)
   2. Initial pressure and Final pressure for central pressure.
