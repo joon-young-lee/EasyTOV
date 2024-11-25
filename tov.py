@@ -11,7 +11,7 @@ def compute_star(args):
     EoS, P_c, del_h, allocate, step_index, total_steps, file_name = args
     M, R, iterations, final_pressure, inner_crust, outer_crust, end = rk4.TOV(EoS, P_c, del_h, allocate)
     
-    print('\n------------------------------------------------')
+    print('------------------------------------------------')
     print(f'{file_name} {step_index/total_steps * 100:.2f} %')
     print(f'Central pressure: {P_c} MeV/fm^3')
     print(f'{M:.5f} M_0')

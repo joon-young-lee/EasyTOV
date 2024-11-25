@@ -37,7 +37,7 @@ def main(del_h = -1.e-5):
         allocate = 1000000
 
         M[l-1], R[l-1], iterations, final_pressure, inner_crust, outer_crust, end = rk4.TOV(EoS, P_c[l-1], del_h, allocate)
-        print('\n------------------------------------------------')
+        print('------------------------------------------------')
         print(file_name, l/step * 100, '%')
         print(f'Central pressure: {P_c[l-1]} MeV/fm^3')
         print(f'{M[l-1]:.5f} M_0')

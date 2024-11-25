@@ -129,10 +129,14 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
             m += dm
             r2 += dr2
 
+# def plot_EoS(file_name): # all units MeV/fm^3
+    
+
+
 def plot(R, M, file_name):
     plt.figure(figsize=(9, 7))
     plt.title('Radius vs. Mass', fontsize=20)
-    plt.plot(R, M, '-', markersize=2, color='r', label='EoS with crust')
+    plt.scatter(R, M, linewidths=0.5, color='r', label='EoS with crust')
     
     plt.xlabel('Radius in km', fontsize=20)
     plt.ylabel(r'Mass in $M_\odot$', fontsize=22)
