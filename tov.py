@@ -29,6 +29,7 @@ def compute_star(args):
 def main(del_h=-1.e-5):
     start_time = time.time()
     current_time = datetime.now()
+    print(f'Number of cores available: {cpu_count()}')
     file_name = str(input("Select EoS in 'eos' dir: "))
     file_name = './eos/' + file_name
     EoS = rk4.eos(file_name)
