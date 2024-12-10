@@ -30,4 +30,4 @@
 
 # Reference
   1. Chagne of metric: tovh.pdf, James Lattimer
-  2. Crust EoS: Baym, 1971, inlcusion of inner and outer crust is default. (unchangable for now!)
+  2. Crust EoS: Baym, 1971, inlcusion of inner and outer crust is default. (unchangeable for now!)
