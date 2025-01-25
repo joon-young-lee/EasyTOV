@@ -38,9 +38,6 @@ def eos(file_name):
 
     eos = CubicSpline(p, e, bc_type='natural', extrapolate=False)
     
-    # plt.plot(p, eos(p))
-    # plt.show()
-    
     return eos # eos in units km(c = G = 1)
 
 
@@ -49,16 +46,63 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
     dp_dh = lambda p: EoS(p) + p # eos in units km(c = G = 1)
     dr2_dh = lambda r2, p, m: -2 * r2 * (np.sqrt(r2) - 2 * m)\
                             /(m + 4 * np.pi * p * r2 ** (3.0/2.0))
+    dr2_dh0 = lambda p: -3 / (2 * np.pi * (3 * p + EoS(p)))
     dm_dh = lambda r2, p, m: -4 * np.pi * EoS(p) * r2 ** (3.0/2.0) * \
                             (np.sqrt(r2) - 2 * m)/(m + 4 * np.pi * p * r2 ** (3.0/2.0))
     
-    p = p0 * cgs.MeV_fm_to_km
-    
-    r2 = -3 / (2 * np.pi * (EoS(p) + 3 * p)) * del_h
-    m = 0.0
     
     outer = 1
     inner = 1
+
+    p0 *= cgs.MeV_fm_to_km
+    p = p0 # + (p0 + EoS(p0)) * del_h
+
+    r2 = 0.0 # -3 / (2 * np.pi * (EoS(p0) + 3 * p0)) * del_h
+    m = 0.0
+    
+    
+    k1_p = dp_dh(p)
+    k1_m = 0.0
+    k1_r2 = dr2_dh0(p)
+    
+    
+    p_2 = p + del_h * k1_p / 2
+    m_2 = m + del_h * k1_m / 2
+    r_2 = r2 + del_h * k1_r2 / 2
+    k2_p = dp_dh(p_2)
+    k2_m = 0.0
+    k2_r2 = dr2_dh0(p_2)
+    
+    
+    p_3 = p + del_h * k2_p / 2
+    m_3 = m + del_h * k2_m / 2
+    r_3 = r2 + del_h * k2_r2 / 2
+    k3_p = dp_dh(p_3)
+    k3_m = 0.0
+    k3_r2 = dr2_dh0(p_3)
+    
+    
+    p_4 = p + del_h * k3_p
+    m_4 = m + del_h * k3_m
+    r_4 = r2 + del_h * k3_r2
+    k4_p = dp_dh(p_4)
+    k4_m = 0.0
+    k4_r2 = dr2_dh0(p_4)
+    
+    dp = (k1_p + 2 * k2_p + 2 * k3_p + k4_p) / 6 * del_h
+    dm = 0.0
+    dr2 = (k1_r2 + 2 * k2_r2 + 2 * k3_r2 + k4_r2) / 6 * del_h
+    
+    
+    p += dp
+    m += dm
+    r2 += dr2
+    print("MeV_fm_to_km = ", cgs.MeV_fm_to_km)
+    pp = 200
+    p_test = pp * cgs.MeV_fm_to_km
+    print(EoS(p_test), f'First EoS, {pp}MeV')
+    print(p, 'First Iteration P')
+    print(r2, "First Iteration r2")
     for i in range(num):
             
         
@@ -97,7 +141,7 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
         if np.isnan(dp) == True or np.isnan(dm) == True:
             mass = m * cgs.km_to_M0
             radius = np.sqrt(r2)
-            iterations = i
+            iterations = i - 1
             final_pressure = p / cgs.MeV_fm_to_km
             inner_crust = np.sqrt(r2)-inner_start
             outer_crust = np.sqrt(r2)-outer_start
@@ -107,7 +151,7 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
         elif (np.abs(dm) / (m+1.e-15) < 1.e-15) and m != 0.0:
             mass = m * cgs.km_to_M0
             radius = np.sqrt(r2)
-            iterations = i
+            iterations = i - 1
             final_pressure = p / cgs.MeV_fm_to_km
             inner_crust = np.sqrt(r2)-inner_start
             outer_crust = np.sqrt(r2)-outer_start
@@ -147,7 +191,7 @@ def plot(R, M, file_name):
     # plt.text(4, 1.5, f'Maximum mass with crust {np.max(M):.2f}', fontsize=17)
     
     plt.suptitle(file_name, fontsize=20)
-    plt.savefig(f'{file_name}')
+    # plt.savefig(f'{file_name}')
     plt.legend(fontsize=20, loc='upper left')
     #  plt.show()
 
