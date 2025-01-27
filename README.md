@@ -27,6 +27,7 @@
 # Updates:
   1. Change functions to classes.
   2. Conversion to Fortran 90 is almost!
+  3. Comparison of computation time is planned.
 
 # Reference
   1. Chagne of metric: tovh.pdf, James Lattimer
