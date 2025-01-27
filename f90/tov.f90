@@ -6,26 +6,71 @@ program tov
   ! integer, parameter :: dp = selected_real_kind(15)
   integer(dp), parameter :: NN = 10 ** 5
   integer(dp), parameter :: coe = 4 * (NN-1)
-  integer, parameter :: max_iterations =  10 ** 6 
-  integer(8) :: n, k
+  integer(8), parameter :: max_iterations =  10 ** 6
+  integer(8) :: k, LengthOfEoS, num, unit_number
   character(len=100) :: file_name
-  real(dp), allocatable :: e_data(:), p_data(:), Coefficients(:, :) ! Coefficient of cubic-poly
-  real(dp) :: y, p, d_p, d_r2, d_m, del_h, p_c, M, r, p_c1
+  real(dp), allocatable :: e_array(:), p_array(:), &
+  Coefficients(:, :), M(:), R(:) ! Coefficient of cubic-poly
+  real(dp) :: y, p_float, d_p, d_r2, d_m, del_h, p_c, &
+  p_c1, EoS, p_start, p_final, &
+  start_time, end_time, elapsed_time, M_0, R_0, diff
 
   ! Read File
   ! print *, MeV_fm_to_km
-  file_name ="eft_pnm32_000001_ldm_eos_s.dat" ! "eft_pnm32_000002_ldm_eos_s.dat" ! 'empirical_reduced.dat' 
+  file_name = "eft_pnm32_000001_ldm_eos_s.dat" 
+  ! "eft_pnm32_000002_ldm_eos_s.dat" ! 'empirical_reduced.dat' 
   print *, 'Attempting to open file: ', file_name
-  CALL read_eos(file_name, n, e_data, p_data) ! Defines n, e_data, p_data, in km 
-  CALL CubicSpline_Coefficients(n, p_data, e_data, Coefficients)
+  CALL read_eos(file_name, LengthOfEoS, p_array, e_array) 
+  ! Defines n, e_data, p_data, in km 
+  CALL CubicSpline_Coefficients(LengthOfEoS, p_array, e_array, Coefficients)
 
-  ! p_c = 500_dp
-  p_c1 = 112_dp
+  p_c = 500.0_dp
+  p_c1 = 200.0_dp
   del_h = -1.e-5
-  ! CALL rk4(n, p_data, Coefficients, del_h, p_c, max_iterations) !, M, r)
-  CALL rk4(n, p_data, Coefficients, del_h, p_c1, max_iterations) !, M, r)
 
-  do k = 1, 20, 1
-    CALL rk4(n, p_data, Coefficients, del_h, (500 - 100) / 100 * DBLE(k) + 100, max_iterations) !, M, r)
+  CALL rk4(LengthOfEoS, p_array, Coefficients, del_h, 500.0_dp,&
+   max_iterations, M_0, R_0)
+  print *, M_0
+  print *, R_0
+  print *, LengthOfEoS
+  p_start = 100.0_dp
+  p_final = 1000.0_dp
+  num = 100
+  diff = (p_final - p_start) / DBLE(num)
+  print *, diff
+  allocate(M(num+1), R(num+1))
+  ! Get the start time
+  CALL cpu_time(start_time)
+  do k = 1, num+1 !concurrent (k  = 1:num + 1)! concurrent (k = 1:num)
+    CALL rk4(LengthOfEoS, p_array, Coefficients, del_h, &
+    (p_final - p_start) / DBLE(num) * (DBLE(k) - 1.0_dp) + 100.0_dp, &
+     max_iterations, M_0, R_0)
+    M(k) = M_0
+    R(k) = R_0
+    
   enddo
+
+  CALL cpu_time(end_time)
+  elapsed_time = end_time - start_time
+  ! Print results
+    print *, "Elapsed CPU time (seconds): ", elapsed_time
+    print *, "Central Pressure", p_start, "MeV/fm^3 ~ ", p_final, "MeV/fm^3"
+  ! Open the file for writing (unit number 20, replace "output.txt" with your desired file name)
+    unit_number = 20
+    open(unit_number, file="output.txt", status="unknown", action="write")
+
+    ! Write header to the file
+    write(unit_number, '(A)') "Mass (M_0)    Radius (km)"
+
+    ! Write data into two columns
+    do k = 1, num+1
+        write(unit_number, '(F10.5, F15.5)') M(k), R(k)
+    end do
+
+    ! Close the file
+    close(unit_number)
+
+    print *, "Data written to output.txt"
+    print *, "Total ", num+1, " stars"
+deallocate(M, R)
 end program tov

@@ -97,12 +97,12 @@ def TOV(EoS, p0, del_h, num): # Initial pressure unit MeV/fm^3
     p += dp
     m += dm
     r2 += dr2
-    print("MeV_fm_to_km = ", cgs.MeV_fm_to_km)
-    pp = 200
-    p_test = pp * cgs.MeV_fm_to_km
-    print(EoS(p_test), f'First EoS, {pp}MeV')
-    print(p, 'First Iteration P')
-    print(r2, "First Iteration r2")
+    # print("MeV_fm_to_km = ", cgs.MeV_fm_to_km)
+    # pp = 200
+    # p_test = pp * cgs.MeV_fm_to_km
+    # print(EoS(p_test), f'First EoS, {pp}MeV')
+    # print(p, 'First Iteration P')
+    # print(r2, "First Iteration r2")
     for i in range(num):
             
         
@@ -191,7 +191,7 @@ def plot(R, M, file_name):
     # plt.text(4, 1.5, f'Maximum mass with crust {np.max(M):.2f}', fontsize=17)
     
     plt.suptitle(file_name, fontsize=20)
-    # plt.savefig(f'{file_name}')
+    plt.savefig(f'{file_name}')
     plt.legend(fontsize=20, loc='upper left')
     #  plt.show()
 
