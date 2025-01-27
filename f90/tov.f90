@@ -17,7 +17,7 @@ program tov
 
   ! Read File
   ! print *, MeV_fm_to_km
-  file_name = "eft_pnm32_000001_ldm_eos_s.dat" 
+  file_name = "../eos/eft_pnm32_000098_ldm_eos_s.dat" 
   ! "eft_pnm32_000002_ldm_eos_s.dat" ! 'empirical_reduced.dat' 
   print *, 'Attempting to open file: ', file_name
   CALL read_eos(file_name, LengthOfEoS, p_array, e_array) 
@@ -41,13 +41,18 @@ program tov
   allocate(M(num+1), R(num+1))
   ! Get the start time
   CALL cpu_time(start_time)
-  do k = 1, num+1 !concurrent (k  = 1:num + 1)! concurrent (k = 1:num)
+  do k = 1, num+1, 1 ! concurrent (k  = 1:num + 1)! concurrent (k = 1:num)
     CALL rk4(LengthOfEoS, p_array, Coefficients, del_h, &
     (p_final - p_start) / DBLE(num) * (DBLE(k) - 1.0_dp) + 100.0_dp, &
      max_iterations, M_0, R_0)
     M(k) = M_0
     R(k) = R_0
-    
+    ! print *, ' '
+    print *, "--------------------"
+    print *, M_0, "Mass in M_0"
+    print *, R_0, "Radius in km"
+    print *, "--------------------"
+    print *, ' '
   enddo
 
   CALL cpu_time(end_time)

@@ -162,19 +162,19 @@ end do
         call dgesv(nn, nrhs, A, nn, ipiv, Coefficients, nn, info)
         ! Check the results
         ! print *, A
-        if (info == 0) then
-          print *, "The Coefficients were properly obtained."
-          ! print *, "Solution"
-          ! print *, Coefficients
-          ! print *, info      
-        else if (info > 0) then
-          print *, "Factorization Failed"
-          print *, info
+        ! if (info == 0) then
+        !   print *, "The Coefficients were properly obtained."
+        !   ! print *, "Solution"
+        !   ! print *, Coefficients
+        !   ! print *, info      
+        ! else if (info > 0) then
+        !   print *, "Factorization Failed"
+        !   print *, info
         
-        else
-          print *, "Invalid Arguments"
+        ! else
+        !   print *, "Invalid Arguments"
         
-        end if
+        ! end if
  ! print *, Coefficients
         
         deallocate(A)
@@ -185,15 +185,17 @@ end subroutine
        
 ! end subroutine
 
-subroutine polynomial_float(n, x_array, Coefficients, x, y)
+pure subroutine polynomial_float(n, x_array, Coefficients, x, y)
            use ieee_arithmetic
            implicit none
            integer, parameter :: dp = selected_real_kind(15)
            ! Double precision (15 digits, large exponent range) 
-           integer(8) :: n, i
-           real(dp), dimension(n) :: x_array
-           real(dp), dimension(4 * (n - 1), 1) :: Coefficients
-           real(dp) :: a, b, c, d, x 
+           integer(8), intent(in) :: n
+           integer ::  i
+           real(dp), dimension(n), intent(in) :: x_array
+           real(dp), dimension(4 * (n - 1), 1), intent(in) :: Coefficients
+           real(dp) :: a, b, c, d
+           real(dp), intent(in) :: x 
            real(dp), intent(out) :: y
            logical :: place, NOT_CAL
            NOT_CAL = (MAXVAL(x_array) < x) .OR. (x < MINVAL(x_array))
@@ -357,14 +359,14 @@ subroutine read_eos(file_name, LengthOfEoS, p_array, e_array)
         do i = 1, SIZE(p_array) - 1, 1
           if (p_array(i) < p_array(i+1)) then
             if (i == SIZE(p_array) - 1) then
-              print *, "p_array is increasing"
+              ! print *, "p_array is increasing"
             endif
             cycle
           else if (p_array(i) > p_array(i+1)) then
-            print *, "p_array is not strictly increasing"
+            ! print *, "p_array is not strictly increasing"
             exit
           else
-            print *, "p_array is increasing"
+            ! print *, "p_array is increasing"
           endif
 
         end do
@@ -380,11 +382,11 @@ end subroutine
 
 ! end subroutine rk4
 
-subroutine dp_dh(LengthOfEoS, x_array, Coefficients, p, d_p)
+pure subroutine dp_dh(LengthOfEoS, x_array, Coefficients, p, d_p)
     use ieee_arithmetic
     implicit none
-    integer(8) :: LengthOfEoS
-    real(dp), dimension(LengthOfEoS) :: x_array
+    integer(8), intent(in) :: LengthOfEoS
+    real(dp), dimension(LengthOfEoS), intent(in) :: x_array
     real(dp), intent(in) :: p
     real(dp), dimension(4 * (LengthOfEoS-1), 1), intent(in) :: Coefficients
     real(dp) :: EoS
@@ -398,12 +400,12 @@ subroutine dp_dh(LengthOfEoS, x_array, Coefficients, p, d_p)
 
 end subroutine 
 
-subroutine dr2_dh(LengthOfEoS, x_array, Coefficients, r2, p, m, d_r2)
+pure subroutine dr2_dh(LengthOfEoS, x_array, Coefficients, r2, p, m, d_r2)
     use ieee_arithmetic
     implicit none
     integer :: i, ios
-    integer(8) :: LengthOfEoS
-    real(dp), dimension(LengthOfEoS) :: x_array
+    integer(8), intent(in) :: LengthOfEoS
+    real(dp), dimension(LengthOfEoS), intent(in) :: x_array
     real(dp), intent(in) :: r2, p, m
     real(dp), dimension(4 * (LengthOfEoS-1), 1), intent(in) :: Coefficients
     real(dp), intent(out) :: d_r2
@@ -417,11 +419,11 @@ subroutine dr2_dh(LengthOfEoS, x_array, Coefficients, r2, p, m, d_r2)
 end subroutine
 
 
-subroutine dm_dh(LengthOfEoS, x_array, Coefficients, r2, p, m, d_m)
+pure subroutine dm_dh(LengthOfEoS, x_array, Coefficients, r2, p, m, d_m)
     use ieee_arithmetic
     implicit none
-    integer(8) :: LengthOfEoS
-    real(dp), dimension(LengthOfEoS) :: x_array
+    integer(8), intent(in) :: LengthOfEoS
+    real(dp), dimension(LengthOfEoS), intent(in) :: x_array
     real(dp), intent(in) :: r2, p, m
     real(dp), dimension(4 * (LengthOfEoS-1), 1), intent(in) :: Coefficients
     real(dp) :: EoS
@@ -435,14 +437,13 @@ subroutine dm_dh(LengthOfEoS, x_array, Coefficients, r2, p, m, d_m)
 !     endif
 end subroutine
 
-subroutine rk4(LengthOfEoS, x_array, Coefficients, del_h, p_c,&
+pure subroutine  rk4(LengthOfEoS, x_array, Coefficients, del_h, p_c,&
  max_iterations, Mass, Radius) ! Coefficients specifies EoS, p_c in MeV/fm^3
   USE, INTRINSIC :: IEEE_ARITHMETIC
   implicit none
-  integer(8) :: LengthOfEoS
-  integer(8), intent(in) :: max_iterations
-  real(dp), dimension(LengthOfEoS) :: x_array
-  real(dp), dimension(4 * (LengthOfEoS-1), 1) :: Coefficients
+  integer(8), intent(in) :: LengthOfEoS, max_iterations
+  real(dp), dimension(LengthOfEoS), intent(in) :: x_array
+  real(dp), dimension(4 * (LengthOfEoS-1), 1), intent(in) :: Coefficients
   integer :: i
   real(dp), intent(in) :: del_h, p_c
   real(dp), intent(out) :: Mass, Radius
@@ -456,9 +457,9 @@ subroutine rk4(LengthOfEoS, x_array, Coefficients, del_h, p_c,&
                     k4_p, k4_m, k4_r2
   ! nan_value = IEEE_VALUE(0.0, IEEE_QUIET_NAN)                   
   ! print *, "MeV_fm_to_km: ", MeV_fm_to_km
-  print *, "Central Pressure: ", p_c, "MeV/fm^3"
+  ! print *, "Central Pressure: ", p_c, "MeV/fm^3"
   p = p_c * MeV_fm_to_km
-  print *, p, "Central Pressure in km"
+  ! print *, p, "Central Pressure in km"
   ! print *, x_array  
   CALL  polynomial_float(LengthOfEoS, x_array, Coefficients, p, EoS)
 
@@ -485,10 +486,10 @@ subroutine rk4(LengthOfEoS, x_array, Coefficients, del_h, p_c,&
   CALL dp_dh(LengthOfEoS, x_array, Coefficients, p_4, k4_p)
   CALL polynomial_float(LengthOfEoS, x_array, Coefficients, p_4, EoS)
   k4_r2 = -3 / (2 * pi * (3 * p_4 + EoS))
-  print *, k4_r2
+  ! print *, k4_r2
   d_p = (k1_p + 2 * k2_p + 2 * k3_p + k4_p) * del_h / 6
   d_r2 = (k1_r2 + 2 * k2_r2 + 2 * k3_r2 + k4_r2) * del_h / 6
-  print *, d_r2,"d_r2"
+  ! print *, d_r2,"d_r2"
   p = p + d_p
   r2 = r2 + d_r2
   
@@ -543,34 +544,34 @@ subroutine rk4(LengthOfEoS, x_array, Coefficients, del_h, p_c,&
        
        Mass = m * km_to_M0
        Radius = sqrt(r2)
-       print *, "Pressure (MeV/fm^3): ", p / MeV_fm_to_km
-       print *, "Radius (km): ", Radius
-       print *, "Mass (M0): ", Mass
-       print *, i, "Iterations"
-       print *, "Ended with NAN"
-       print *, "do loop end-------------------------------------------------- \n"
+!        print *, "Pressure (MeV/fm^3): ", p / MeV_fm_to_km
+!        print *, "Radius (km): ", Radius
+!        print *, "Mass (M0): ", Mass
+!        print *, i, "Iterations"
+!        print *, "Ended with NAN"
+!        print *, "do loop end-------------------------------------------------- \n"
        exit
        
       else if (abs(d_m) / (m+1.e-15) < 1.0e-15_dp) then
         Mass = m * km_to_M0
         Radius = sqrt(r2)
-        print *, "Pressure (MeV/fm^3): ", p / MeV_fm_to_km
-        print *, "Radius (km): ", Radius
-        print *, "Mass (M0): ", Mass
-        print *, i, "Iterations"
-        print *, "Ended with dm"
+        ! print *, "Pressure (MeV/fm^3): ", p / MeV_fm_to_km
+        ! print *, "Radius (km): ", Radius
+        ! print *, "Mass (M0): ", Mass
+        ! print *, i, "Iterations"
+        ! print *, "Ended with dm"
         
-        print *, "do loop end--------------------------------------------------\n"
+        ! print *, "do loop end--------------------------------------------------\n"
         exit
       else if (p / MeV_fm_to_km < 1.e-13_dp) then
         Mass = m * km_to_M0
         Radius = sqrt(r2)
-        print *, "Pressure (MeV/fm^3): ", p / MeV_fm_to_km
-        print *, "Radius (km): ", Radius
-        print *, "Mass (M0): ", Mass
-        print *, i, "Iterations"
-        print *, "Ended with dm"
-        print *, "do loop end--------------------------------------------------\n"
+        ! print *, "Pressure (MeV/fm^3): ", p / MeV_fm_to_km
+        ! print *, "Radius (km): ", Radius
+        ! print *, "Mass (M0): ", Mass
+        ! print *, i, "Iterations"
+        ! print *, "Ended with dm"
+        ! print *, "do loop end--------------------------------------------------\n"
         exit
       else
         p = p + d_p
