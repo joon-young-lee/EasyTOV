@@ -1,10 +1,15 @@
 # Easy Tolman-Oppenheimer-Volkoff equation solver using RK4 method.
-
-# How to run multi-core:
+# How to run Fortran 90:
+  move to f90 dir.
+  ```console
+  $ gfortran -o main tov_rk4.f90 tov.f90 -llapack -lblas
+  $ ./main
+  ```
+# How to run Python multi-core:
   ```console
   $ python -u tov.py
   ```
-# How to run single-core:
+# How to run Python single-core:
   ```console
   $ python -u single_processing_tov.py
   ```
@@ -26,7 +31,8 @@
 
 # Updates:
   1. Change functions to classes.
-  2. Conversion to Fortran 90 is expected!
+  2. Conversion to Fortran 90 is almost!
+  3. Comparison of computation time is planned.
 
 # Reference
   1. Chagne of metric: tovh.pdf, James Lattimer
