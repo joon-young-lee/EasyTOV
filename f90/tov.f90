@@ -1,4 +1,5 @@
 program tov
+ use OMP_LIB
  use tov_rk4
  implicit none
   ! tov solver that returns M-R relation of neutron stars
@@ -14,6 +15,8 @@ program tov
   real(dp) :: y, p_float, d_p, d_r2, d_m, del_h, p_c, &
   p_c1, EoS, p_start, p_final, &
   start_time, end_time, elapsed_time, M_0, R_0, diff
+  logical :: OMP_DYNAMIC
+
 
   ! Read File
   ! print *, MeV_fm_to_km
@@ -41,19 +44,29 @@ program tov
   allocate(M(num+1), R(num+1))
   ! Get the start time
   CALL cpu_time(start_time)
-  do k = 1, num+1, 1 ! concurrent (k  = 1:num + 1)! concurrent (k = 1:num)
+  
+  
+  !$OMP PARALLEL PRIVATE(TID)
+  print *, "Hello from process: ", OMP_GET_THREAD_NUM()
+  print *, "Get Dynamic: ", omp_get_dynamic()
+  OMP_DYNAMIC = .TRUE.
+  
+  
+  
+  do concurrent (k  = 1:num + 1)! concurrent (k = 1:num)
     CALL rk4(LengthOfEoS, p_array, Coefficients, del_h, &
     (p_final - p_start) / DBLE(num) * (DBLE(k) - 1.0_dp) + 100.0_dp, &
      max_iterations, M_0, R_0)
     M(k) = M_0
     R(k) = R_0
     ! print *, ' '
-    print *, "--------------------"
-    print *, M_0, "Mass in M_0"
-    print *, R_0, "Radius in km"
-    print *, "--------------------"
-    print *, ' '
+    ! print *, "--------------------"
+    ! print *, M_0, "Mass in M_0"
+    ! print *, R_0, "Radius in km"
+    ! print *, "--------------------"
+    ! print *, ' '
   enddo
+  !$OMP END PARALLEL
 
   CALL cpu_time(end_time)
   elapsed_time = end_time - start_time
